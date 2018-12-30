@@ -14,8 +14,11 @@ _android_arch=armv7a-eabi
 # Minimum Android platform based on:
 #
 # https://developer.android.com/about/dashboards/
+
+# @brychdaneel: it is not minimum platform. It's build platform
+
 if [ -z "${ANDROID_MINIMUM_PLATFORM}" ]; then
-    export ANDROID_MINIMUM_PLATFORM=22
+    export ANDROID_MINIMUM_PLATFORM=28
 fi
 
 if [ -z "${ANDROID_NDK_ROOT}" ]; then
@@ -146,6 +149,8 @@ build() {
             ;;
     esac
 
+    export OPENSSL_LIBS='-L/home/develop/OpenSSL-for-Android-Prebuilt/openssl-1.0.2/armeabi-v7a/lib/ -lssl -lcrypto'
+
     configue_opts="
         -confirm-license
         -opensource
@@ -172,7 +177,8 @@ build() {
         -android-ndk-platform ${ANDROID_NDK_PLATFORM}
         -ssl
         -openssl
-        -I/home/develop/openssl/include"
+        -openssl-linked
+        -I/home/develop/OpenSSL-for-Android-Prebuilt/openssl-1.0.2/include"
 
     [[ $ANDROID_DEBUG_BUILD ]] \
         && configue_opts+=' -debug-and-release' \
